@@ -3,7 +3,7 @@ from . import models
 from .security import hash_password
 
 
-def reset_admin_password():
+def setup_admin():
     db = SessionLocal()
 
     try:
@@ -14,20 +14,39 @@ def reset_admin_password():
         )
 
         if admin is None:
-            print("Admin user not found")
-            return
+            admin = models.User(
+                name="Admin",
+                email="admin@gmail.com",
+                password_hash=hash_password("admin123"),
+                role="admin",
+                is_active=True
+            )
 
-        admin.password_hash = hash_password("admin123")
+            db.add(admin)
+            db.commit()
+            db.refresh(admin)
 
-        db.commit()
+            print("Admin created successfully")
 
-        print("Admin password reset successfully")
+        else:
+            admin.password_hash = hash_password("admin123")
+            admin.role = "admin"
+            admin.is_active = True
+
+            db.commit()
+
+            print("Admin already existed - password reset successfully")
+
         print("Email: admin@gmail.com")
-        print("New password: admin123")
+        print("Password: admin123")
+
+    except Exception as e:
+        db.rollback()
+        print(f"Admin setup failed: {e}")
 
     finally:
         db.close()
 
 
 if __name__ == "__main__":
-    reset_admin_password()
+    setup_admin()
