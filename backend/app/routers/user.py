@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 
 from ..database import get_db
 from .. import models
-from ..schemas import UserCreate, UserResponse
+from ..models.user import User
+from ..schemas.user import UserCreate, UserResponse
 from ..security import hash_password
 from ..dependencies import require_admin
 

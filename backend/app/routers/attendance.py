@@ -3,7 +3,9 @@ from sqlalchemy.orm import Session
 
 from ..database import get_db
 from .. import models
-from ..schemas import AttendanceCreate, AttendanceResponse, AttendanceUpdate
+from ..models.attendance import Attendance
+from ..models.employee import Employee
+from ..schemas.attendance import AttendanceCreate, AttendanceResponse, AttendanceUpdate
 from ..security import get_current_user
 
 
@@ -21,9 +23,9 @@ def create_attendance(
 ):
 
     employee = (
-        db.query(models.Employee)
+        db.query(Employee)
         .filter(
-            models.Employee.id == attendance.employee_id
+            Employee.id == attendance.employee_id
         )
         .first()
     )
@@ -34,7 +36,7 @@ def create_attendance(
             detail="Employee not found"
         )
 
-    new_attendance = models.Attendance(
+    new_attendance = Attendance(
         employee_id=attendance.employee_id,
         attendance_date=attendance.attendance_date,
         check_in=attendance.check_in,
@@ -59,8 +61,8 @@ def get_attendance(
     current_user: models.User = Depends(get_current_user)
 ):
     attendance = (
-        db.query(models.Attendance)
-        .filter(models.Attendance.id == attendance_id)
+        db.query(Attendance)
+        .filter(Attendance.id == attendance_id)
         .first()
     )
 
@@ -83,8 +85,8 @@ def update_attendance(
     current_user: models.User = Depends(get_current_user)
 ):
     attendance = (
-        db.query(models.Attendance)
-        .filter(models.Attendance.id == attendance_id)
+        db.query(Attendance)
+        .filter(Attendance.id == attendance_id)
         .first()
     )
 
@@ -113,8 +115,8 @@ def delete_attendance(
     current_user: models.User = Depends(get_current_user)
 ):
     attendance = (
-        db.query(models.Attendance)
-        .filter(models.Attendance.id == attendance_id)
+        db.query(Attendance)
+        .filter(Attendance.id == attendance_id)
         .first()
     )
 

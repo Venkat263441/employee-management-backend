@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from .. import models
 from ..security import get_current_user
 from ..database import get_db
-from ..models import Employee
-from ..schemas import (
+from ..models.employee import Employee
+from ..schemas.employee import (
     EmployeeCreate,
     EmployeeResponse,
     EmployeeUpdate,

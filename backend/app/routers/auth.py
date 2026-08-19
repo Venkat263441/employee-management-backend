@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from ..database import get_db
 from .. import models
-from ..schemas import LoginRequest, TokenResponse
+from ..schemas.auth import LoginRequest, TokenResponse
 from ..security import (
     verify_password,
     create_access_token
