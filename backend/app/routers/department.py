@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 from ..security import get_current_user
 from ..database import get_db
 from .. import models
-from ..schemas import DepartmentCreate, DepartmentResponse
+from ..models.department import Department
+from ..schemas.department import DepartmentCreate, DepartmentResponse
 from ..dependencies import require_admin
 
 
@@ -20,8 +21,8 @@ def create_department(
     current_user: models.User = Depends(require_admin)
 ):
     existing_department = (
-        db.query(models.Department)
-        .filter(models.Department.name == department.name)
+        db.query(Department)
+        .filter(Department.name == department.name)
         .first()
     )
 
@@ -31,7 +32,7 @@ def create_department(
             detail="Department already exists"
         )
 
-    new_department = models.Department(
+    new_department = Department(
         name=department.name,
         description=department.description,
         is_active=True
@@ -61,8 +62,8 @@ def update_department(
     current_user: models.User = Depends(require_admin)
 ):
     existing_department = (
-        db.query(models.Department)
-        .filter(models.Department.id == department_id)
+        db.query(Department)
+        .filter(Department.id == department_id)
         .first()
     )
 
@@ -88,8 +89,8 @@ def delete_department(
     current_user: models.User = Depends(require_admin)
 ):
     department = (
-        db.query(models.Department)
-        .filter(models.Department.id == department_id)
+        db.query(Department)
+        .filter(Department.id == department_id)
         .first()
     )
 

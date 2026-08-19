@@ -3,7 +3,9 @@ from sqlalchemy.orm import Session
 
 from ..database import get_db
 from .. import models
-from ..schemas import (
+from ..models.employee import Employee
+from ..models.leave import Leave
+from ..schemas.leave import (
     LeaveCreate,
     LeaveUpdate,
     LeaveResponse
@@ -30,9 +32,9 @@ def create_leave(
 ):
 
     employee = (
-        db.query(models.Employee)
+        db.query(Employee)
         .filter(
-            models.Employee.id == leave.employee_id
+            Employee.id == leave.employee_id
         )
         .first()
     )
@@ -49,7 +51,7 @@ def create_leave(
             detail="Start date cannot be after end date"
         )
 
-    new_leave = models.Leave(
+    new_leave = Leave(
         employee_id=leave.employee_id,
         leave_type=leave.leave_type,
         start_date=leave.start_date,
@@ -76,8 +78,8 @@ def get_leaves(
 ):
 
     return (
-        db.query(models.Leave)
-        .order_by(models.Leave.id.desc())
+        db.query(Leave)
+        .order_by(Leave.id.desc())
         .all()
     )
 
@@ -94,8 +96,8 @@ def get_leave(
 ):
 
     leave = (
-        db.query(models.Leave)
-        .filter(models.Leave.id == leave_id)
+        db.query(Leave)
+        .filter(Leave.id == leave_id)
         .first()
     )
 
@@ -121,8 +123,8 @@ def update_leave(
 ):
 
     leave = (
-        db.query(models.Leave)
-        .filter(models.Leave.id == leave_id)
+        db.query(Leave)
+        .filter(Leave.id == leave_id)
         .first()
     )
 
@@ -163,8 +165,8 @@ def delete_leave(
 ):
 
     leave = (
-        db.query(models.Leave)
-        .filter(models.Leave.id == leave_id)
+        db.query(Leave)
+        .filter(Leave.id == leave_id)
         .first()
     )
 
@@ -194,8 +196,8 @@ def approve_leave(
 ):
 
     leave = (
-        db.query(models.Leave)
-        .filter(models.Leave.id == leave_id)
+        db.query(Leave)
+        .filter(Leave.id == leave_id)
         .first()
     )
 
